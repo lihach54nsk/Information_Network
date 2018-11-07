@@ -11,7 +11,7 @@ namespace Information_Network
 {
     class Program
     {
-        byte[] data = new byte[50];
+        byte[] data = new byte[22];
 
         Package package = new Package();    
 
@@ -31,7 +31,7 @@ namespace Information_Network
             while (true)
             {
                 var connect = socket.Accept();
-                byte[] buffer = new byte[50];
+                byte[] buffer = new byte[22];
                 var dataFrom = socket.Receive(buffer);
                 connect.Send(buffer);
                 connect.Shutdown(SocketShutdown.Both);
@@ -47,6 +47,22 @@ namespace Information_Network
             socket.Send(package.ToBinary(data));
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
+        }
+
+        void SetData()
+        {
+            RandomData randomData = new RandomData();
+            DateTime dateTime = new DateTime();
+            //package.PackageId = // создать очередь
+            package.NodeId = 1; // жду конфиг
+            //package.Time = dateTime // сейчас
+            package.Humidity = randomData.GetHumidity();
+            package.IsFire = randomData.GetFire();
+            package.Lighting = randomData.GetLightning();
+            package.Pressure = randomData.GetPressure();
+            package.Temperature = randomData.GetTemperatue();
+
+            data = package.ToBinary(data);
         }
     }
 }

@@ -6,14 +6,14 @@ namespace MeshNetworkServer
 {
     struct Package
     {
-        public uint PackageId { get; set; }
-        public ushort NodeId { get; set; }
-        public DateTime Time { get; set; }
-        public ushort? Pressure { get; set; }
-        public ushort? Lighting { get; set; }
-        public sbyte? Temperature { get; set; }
-        public byte? Humidity { get; set; }
-        public bool? IsFire { get; set; }
+        public uint PackageId { get; set; } // ID пакета
+        public ushort NodeId { get; set; } // ID узла
+        public DateTime Time { get; set; } // Время
+        public ushort? Pressure { get; set; } // Давление
+        public ushort? Lighting { get; set; } // Освещённость
+        public sbyte? Temperature { get; set; } // Температура
+        public byte? Humidity { get; set; } // Влажность
+        public bool? IsFire { get; set; } // Пожар
 
         private const int bufferSize = 22;
 

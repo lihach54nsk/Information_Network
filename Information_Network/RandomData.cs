@@ -6,17 +6,22 @@ using System.Threading.Tasks;
 
 namespace Information_Network
 {
-    class Random
+    class RandomData
     {
         Random random = new Random();
 
         public ushort GetPressure() => Convert.ToUInt16(random.Next(999));
 
-        public ushort GetLightning() => Convert.ToInt16(random.Next(9999));
+        public ushort GetLightning() => Convert.ToUInt16(random.Next(9999));
 
         public sbyte GetTemperatue()
         {
-            //ask about it
+            switch (random.Next(1))
+            {
+                case 0:return Convert.ToSByte(-random.Next(80));
+                case 1:return Convert.ToSByte(random.Next(80));
+            }
+            return 0;
         }
 
         public byte GetHumidity() => Convert.ToByte(random.Next(100));
@@ -28,6 +33,7 @@ namespace Information_Network
                 case 0: return false;
                 case 1: return true;
             }
+            return false;
         }
     }
 }
