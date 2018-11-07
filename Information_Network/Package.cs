@@ -19,7 +19,7 @@ namespace MeshNetworkServer
 
         public byte[] ToBinary(byte[] pool)
         {
-            if(pool.Length< bufferSize)
+            if (pool.Length < bufferSize)
             {
                 throw new ArgumentException();
             }
@@ -29,7 +29,6 @@ namespace MeshNetworkServer
             WriteDataToArray(pool, BitConverter.GetBytes(PackageId), 0, 4);
             WriteDataToArray(pool, BitConverter.GetBytes(NodeId), 4, 2);
             WriteDataToArray(pool, BitConverter.GetBytes(Time.Ticks), 6, 8);
-
 
             if (Pressure != null)
             {
@@ -55,7 +54,7 @@ namespace MeshNetworkServer
                 flags |= SensorFlags.Humidity;
             }
 
-            if(IsFire != null)
+            if (IsFire != null)
             {
                 pool[20] = (byte)(IsFire.Value ? 1 : 0);
                 flags |= SensorFlags.IsFire;
@@ -118,13 +117,13 @@ namespace MeshNetworkServer
     }
 
     [Flags]
-    enum SensorFlags:byte
+    enum SensorFlags : byte
     {
-        None =        0b00000000,
-        Pressure =    0b00000001,
-        Lighting =    0b00000010,
+        None = 0b00000000,
+        Pressure = 0b00000001,
+        Lighting = 0b00000010,
         Temperature = 0b00000100,
-        Humidity =    0b00001000,
-        IsFire =      0b00010000
+        Humidity = 0b00001000,
+        IsFire = 0b00010000
     }
 }
