@@ -11,8 +11,9 @@ namespace Information_Network
 {
     class Program
     {
-        uint[] packID = new uint[1000];
+        uint[] packID = new uint[100];
         int packageCount = 0;
+        int ptrPack = 0;
         IPAddress[] iPAddresses = new IPAddress[100];
         int[] portsToSend = new int[100];
 
@@ -39,7 +40,12 @@ namespace Information_Network
                 var taskSend = Task.Factory.StartNew
                     (() => SocketSenderUDP(IPAddress, port, SetData().ToBinary(data)));
             }
-            // работа через Task
+
+            while (true)
+            {
+                Console.WriteLine("0 - выход, остальное  - отправка");
+                if (Console.ReadLine() == "0") SendData(SetData().ToBinary(data));
+            }
         }
 
         void SendData(byte[] data)
