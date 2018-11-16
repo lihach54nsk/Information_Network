@@ -11,15 +11,13 @@ namespace Information_Network
 {
     class Program
     {
-        uint[] packID = new uint[100];
-        int packageCount = 0; // надо придумать, как перезаписывать массив с PackageId, не теряя то, что ещё актуально
+        static uint[] packID = new uint[100];
+        static int packageCount = 0; // надо придумать, как перезаписывать массив с PackageId, не теряя то, что ещё актуально
         int ptrPack = 0; // надо придумать, как перезаписывать массив с PackageId, не теряя то, что ещё актуально
-        IPAddress[] iPAddresses = new IPAddress[100];
-        int[] portsToSend = new int[100];
+        static IPAddress[] iPAddresses = new IPAddress[100];
+        static int[] portsToSend = new int[100];
 
-        Socket socket;
-
-        void Main(string[] args)
+        static void Main(string[] args)
         {
             Console.WriteLine("Введите количество соседей");
             int c = Convert.ToInt32(Console.ReadLine());
@@ -35,58 +33,58 @@ namespace Information_Network
                 Console.WriteLine("Введите порт соседа");
                 portsToSend[i] = port;
                 var portEnd = Convert.ToInt32(Console.ReadLine());
-                var taskListen = Task.Factory.StartNew
-                    (() => { SocketListenerUDP(IPAddress, portEnd); });
                 var taskSend = Task.Factory.StartNew
-                    (() => SocketSenderUDP(IPAddress, port, SetData().ToBinary(data)));
+                    (() => SocketSenderUDP(IPAddress, portEnd, SetData().ToBinary(data)));
+                var taskListen = Task.Factory.StartNew
+                    (() => { SocketListenerUDP(IPAddress, port); });
             }
 
             while (true)
             {
                 Console.WriteLine("0 - выход, остальное  - отправка");
-                if (Console.ReadLine() == "0") SendData(SetData().ToBinary(data));
+                if (Console.ReadLine() != "0") { SendData(SetData().ToBinary(data)); }
+                else break;
             }
         }
 
-        void SendData(byte[] data)
+        static void SendData(byte[] data)
         {
             int i = 0;
-            while (iPAddresses[i] != null) SocketSenderUDP(iPAddresses[i], portsToSend[i], data);
+            while (iPAddresses[i] != null) { SocketSenderUDP(iPAddresses[i], portsToSend[i], data); i++; }
+            Console.WriteLine("Отправил куче народа!");
         }
 
-        public void SocketListenerUDP(IPAddress iPAddress, int port) // прослушка и отправка пришедших данных
+        public static void SocketListenerUDP(IPAddress iPAddress, int port) // прослушка и отправка пришедших данных
         {
             UdpClient listener = new UdpClient();
 
             IPEndPoint endPoint = new IPEndPoint(iPAddress, port);
 
-            try
-            {
-                while (true)
-                {
-                    byte[] listen = listener.Receive(ref endPoint);
+            Socket socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
 
-                    if (CheckPackID(listen) == true) continue;
-                    else SendData(listen);
-                }
-            }
-            catch
-            {
-                Console.WriteLine("Миша, всё хуйня, давай Пановой!");
-            }
+            byte[] data = new byte[22];
 
-            listener.Close();
+            socket.Bind(endPoint);
+
+            while (true)
+            {
+                socket.Receive(data);
+                Console.WriteLine("Принял!");
+                if (CheckPackID(data) == true) continue;
+                else SendData(data);
+            }
         }
 
-        public void SocketSenderUDP(IPAddress iPAddress, int port, byte[] data) // отправка данных
+        public static void SocketSenderUDP(IPAddress iPAddress, int port, byte[] data) // отправка данных
         {
             UdpClient sender = new UdpClient();
+            Socket socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
             IPEndPoint endPoint = new IPEndPoint(iPAddress, port);
             Package package = new Package();
 
             try
             {
-                sender.Send(package.ToBinary(data), data.Length, endPoint);
+                socket.SendTo(package.ToBinary(data), endPoint);
                 int i = 0;
 
                 while (packID[i] != 0)
@@ -96,6 +94,7 @@ namespace Information_Network
 
                 packID[i] = package.PackageId;
                 packageCount++;
+                Console.WriteLine("Отправил по адресу");
             }
             catch
             {
@@ -105,7 +104,7 @@ namespace Information_Network
             sender.Close();
         }
 
-        bool CheckPackID(byte[] listen)
+        static bool CheckPackID(byte[] listen)
         {
             var check = Package.FromBinary(listen);
 
@@ -149,12 +148,12 @@ namespace Information_Network
             socket.Close();
         }*/
 
-        Package SetData()
+        static Package SetData()
         {
             Package package = new Package();
             RandomData randomData = new RandomData();
             Random random = new Random();
-            package.PackageId = Convert.ToUInt32(random.Next(0, 100)); // создать очередь, пока заглушка
+            package.PackageId = Convert.ToUInt32(random.Next(1, 100)); // создать очередь, пока заглушка
             package.NodeId = 1; // жду конфиг
             package.Time = DateTime.Now;
             package.Humidity = randomData.GetHumidity();
