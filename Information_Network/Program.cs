@@ -33,8 +33,10 @@ namespace Information_Network
                 Console.WriteLine("Введите порт соседа");
                 portsToSend[i] = port;
                 var portEnd = Convert.ToInt32(Console.ReadLine());
+                Package pack = SetData();
+                var packBin = pack.ToBinary(data);
                 var taskSend = Task.Factory.StartNew
-                    (() => SocketSenderUDP(IPAddress, portEnd, SetData().ToBinary(data)));
+                    (() => SocketSenderUDP(IPAddress, portEnd, packBin));
                 var taskListen = Task.Factory.StartNew
                     (() => { SocketListenerUDP(IPAddress, port); });
             }
@@ -84,16 +86,18 @@ namespace Information_Network
 
             try
             {
-                socket.SendTo(package.ToBinary(data), endPoint);
                 int i = 0;
-
                 while (packID[i] != 0)
                 {
                     i++;
                 }
 
-                packID[i] = package.PackageId;
+                packID[i] = data[0];
                 packageCount++;
+
+                var toSend = package.ToBinary(data);
+                socket.SendTo(package.ToBinary(data), endPoint);                
+
                 Console.WriteLine("Отправил по адресу");
             }
             catch
@@ -148,21 +152,22 @@ namespace Information_Network
             socket.Close();
         }*/
 
+        static Package pack = new Package();
+
         static Package SetData()
         {
-            Package package = new Package();
             RandomData randomData = new RandomData();
             Random random = new Random();
-            package.PackageId = Convert.ToUInt32(random.Next(1, 100)); // создать очередь, пока заглушка
-            package.NodeId = 1; // жду конфиг
-            package.Time = DateTime.Now;
-            package.Humidity = randomData.GetHumidity();
-            package.IsFire = randomData.GetFire();
-            package.Lighting = randomData.GetLightning();
-            package.Pressure = randomData.GetPressure();
-            package.Temperature = randomData.GetTemperatue();
+            pack.PackageId = Convert.ToUInt32(random.Next(1, 5)); // создать очередь, пока заглушка
+            pack.NodeId = 1; // жду конфиг
+            pack.Time = DateTime.Now;
+            pack.Humidity = randomData.GetHumidity();
+            pack.IsFire = randomData.GetFire();
+            pack.Lighting = randomData.GetLightning();
+            pack.Pressure = randomData.GetPressure();
+            pack.Temperature = randomData.GetTemperatue();
 
-            return package;
+            return pack;
         }
     }
 }
