@@ -25,11 +25,10 @@ namespace Information_Network
             Console.WriteLine("Введите количество соседей");
             int c = Convert.ToInt32(Console.ReadLine());
             byte[] data = new byte[22];
-            
+
 
             for (int i = 0; i < c; i++)
             {
-                Package package = new Package();
                 Console.WriteLine("Введите адрес соседа");
                 IPAddress IPAddress = IPAddress.Parse(Console.ReadLine());
                 iPAddresses[i] = IPAddress;
@@ -81,7 +80,7 @@ namespace Information_Network
             UdpClient sender = new UdpClient();
             IPEndPoint endPoint = new IPEndPoint(iPAddress, port);
             Package package = new Package();
-            
+
             try
             {
                 sender.Send(package.ToBinary(data), data.Length, endPoint);
