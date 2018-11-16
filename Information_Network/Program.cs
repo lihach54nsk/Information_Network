@@ -15,8 +15,6 @@ namespace Information_Network
         int packageCount = 0;
         IPAddress[] iPAddresses = new IPAddress[100];
         int[] portsToSend = new int[100];
-        //Queue<byte[]> queueToSend = new Queue<byte[]>();
-
 
         Socket socket;
 
@@ -25,7 +23,6 @@ namespace Information_Network
             Console.WriteLine("Введите количество соседей");
             int c = Convert.ToInt32(Console.ReadLine());
             byte[] data = new byte[22];
-
 
             for (int i = 0; i < c; i++)
             {
