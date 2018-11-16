@@ -12,8 +12,8 @@ namespace Information_Network
     class Program
     {
         uint[] packID = new uint[100];
-        int packageCount = 0;
-        int ptrPack = 0;
+        int packageCount = 0; // надо придумать, как перезаписывать массив с PackageId, не теряя то, что ещё актуально
+        int ptrPack = 0; // надо придумать, как перезаписывать массив с PackageId, не теряя то, что ещё актуально
         IPAddress[] iPAddresses = new IPAddress[100];
         int[] portsToSend = new int[100];
 
