@@ -82,7 +82,6 @@ namespace Information_Network
             UdpClient sender = new UdpClient();
             Socket socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
             IPEndPoint endPoint = new IPEndPoint(iPAddress, port);
-            Package package = new Package();
 
             try
             {
@@ -95,7 +94,6 @@ namespace Information_Network
                 packID[i] = data[0];
                 packageCount++;
 
-               // var toSend = package.ToBinary(data); // ToBinary() - problem
                 socket.SendTo(data, endPoint);
 
                 Console.WriteLine("Отправил по адресу");
