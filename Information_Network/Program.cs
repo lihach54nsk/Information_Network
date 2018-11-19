@@ -102,7 +102,7 @@ namespace Information_Network
             }
             catch
             {
-                Console.WriteLine("Миша, всё хуйня, давай Пановой!");
+                Console.WriteLine("Что-то пошло не так!");
             }
 
             sender.Close();
