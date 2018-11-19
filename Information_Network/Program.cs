@@ -95,8 +95,8 @@ namespace Information_Network
                 packID[i] = data[0];
                 packageCount++;
 
-                var toSend = package.ToBinary(data); // ToBinary() - problem
-                socket.SendTo(package.ToBinary(data), endPoint);
+               // var toSend = package.ToBinary(data); // ToBinary() - problem
+                socket.SendTo(data, endPoint);
 
                 Console.WriteLine("Отправил по адресу");
             }
