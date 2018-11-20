@@ -157,7 +157,7 @@ namespace Information_Network
             RandomData randomData = new RandomData();
             Random random = new Random();
             pack.PackageId = Convert.ToUInt32(random.Next(1, 5)); // создать очередь, пока заглушка
-            pack.NodeId = 1; // жду конфиг
+            pack.NodeId = 5; // жду конфиг
             pack.Time = DateTime.Now;
             pack.Humidity = randomData.GetHumidity();
             pack.IsFire = randomData.GetFire();
