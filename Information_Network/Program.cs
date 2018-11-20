@@ -21,24 +21,24 @@ namespace Information_Network
         {
             Console.WriteLine("Введите количество соседей");
             int c = Convert.ToInt32(Console.ReadLine());
-            byte[] data = new byte[22];
+            byte[] data = new byte[21];
 
             for (int i = 0; i < c; i++)
             {
                 Console.WriteLine("Введите адрес соседа");
                 IPAddress IPAddress = IPAddress.Parse(Console.ReadLine());
                 iPAddresses[i] = IPAddress;
-                Console.WriteLine("Введите порт работы");
-                var port = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine("Введите порт соседа");
-                portsToSend[i] = port;
-                var portEnd = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Введите порт прослушки");
+                var portListen = Convert.ToInt32(Console.ReadLine());
+                portsToSend[i] = portListen;
+                Console.WriteLine("Введите порт отправки");                
+                var portSend = Convert.ToInt32(Console.ReadLine());
                 Package pack = SetData();
                 var packBin = pack.ToBinary(data);
                 var taskSend = Task.Factory.StartNew
-                    (() => SocketSenderUDP(IPAddress, portEnd, packBin));
-                var taskListen = Task.Factory.StartNew
-                    (() => { SocketListenerUDP(IPAddress, port); });
+                    (() => SocketSenderUDP(IPAddress, portSend, packBin));
+               /* var taskListen = Task.Factory.StartNew
+                    (() => { SocketListenerUDP(IPAddress, portListen); });*/
             }
 
             while (true)
@@ -64,7 +64,7 @@ namespace Information_Network
 
             Socket socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
 
-            byte[] data = new byte[22];
+            byte[] data = new byte[21];
 
             socket.Bind(endPoint);
 
